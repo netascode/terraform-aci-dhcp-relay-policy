@@ -1,22 +1,29 @@
 <!-- BEGIN_TF_DOCS -->
-[![Tests](https://github.com/netascode/terraform-aci-scaffolding/actions/workflows/test.yml/badge.svg)](https://github.com/netascode/terraform-aci-scaffolding/actions/workflows/test.yml)
+[![Tests](https://github.com/netascode/terraform-aci-dhcp-relay-policy/actions/workflows/test.yml/badge.svg)](https://github.com/netascode/terraform-aci-dhcp-relay-policy/actions/workflows/test.yml)
 
-# Terraform ACI Scaffolding Module
+# Terraform ACI DHCP Relay Policy Module
 
-Description
+Manages ACI DHCP Relay Policy
 
 Location in GUI:
-`Tenants` » `XXX`
+`Tenants` » `XXX` » `Policies` » `Protocol` » `DHCP` » `Relay Policies`
 
 ## Examples
 
 ```hcl
-module "aci_scaffolding" {
-  source = "netascode/scaffolding/aci"
+module "aci_dhcp_relay_policy" {
+  source = "netascode/dhcp-relay-policy/aci"
 
-  name        = "ABC"
-  alias       = "ABC-ALIAS"
+  tenant      = "ABC"
+  name        = "DHCP-RELAY1"
   description = "My Description"
+  providers_ = [{
+    ip                  = "10.1.1.1"
+    type                = "epg"
+    tenant              = "ABC"
+    application_profile = "AP1"
+    endpoint_group      = "EPG1"
+  }]
 }
 
 ```
@@ -38,20 +45,22 @@ module "aci_scaffolding" {
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_name"></a> [name](#input\_name) | Tenant name. | `string` | n/a | yes |
-| <a name="input_alias"></a> [alias](#input\_alias) | Tenant alias. | `string` | `""` | no |
-| <a name="input_description"></a> [description](#input\_description) | Tenant description. | `string` | `""` | no |
+| <a name="input_tenant"></a> [tenant](#input\_tenant) | Tenant name. | `string` | n/a | yes |
+| <a name="input_name"></a> [name](#input\_name) | DHCP relay policy name. | `string` | n/a | yes |
+| <a name="input_description"></a> [description](#input\_description) | Description. | `string` | `""` | no |
+| <a name="input_providers_"></a> [providers\_](#input\_providers\_) | List of DHCP providers. Choices `type`: `epg`, `external_epg`. | <pre>list(object({<br>    ip                      = string<br>    type                    = string<br>    tenant                  = optional(string)<br>    application_profile     = optional(string)<br>    endpoint_group          = optional(string)<br>    l3out                   = optional(string)<br>    external_endpoint_group = optional(string)<br>  }))</pre> | `[]` | no |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| <a name="output_dn"></a> [dn](#output\_dn) | Distinguished name of `fvTenant` object. |
-| <a name="output_name"></a> [name](#output\_name) | Tenant name. |
+| <a name="output_dn"></a> [dn](#output\_dn) | Distinguished name of `dhcpRelayP` object. |
+| <a name="output_name"></a> [name](#output\_name) | DHCP relay policy name. |
 
 ## Resources
 
 | Name | Type |
 |------|------|
-| [aci_rest.fvTenant](https://registry.terraform.io/providers/netascode/aci/latest/docs/resources/rest) | resource |
+| [aci_rest.dhcpRelayP](https://registry.terraform.io/providers/netascode/aci/latest/docs/resources/rest) | resource |
+| [aci_rest.dhcpRsProv](https://registry.terraform.io/providers/netascode/aci/latest/docs/resources/rest) | resource |
 <!-- END_TF_DOCS -->
