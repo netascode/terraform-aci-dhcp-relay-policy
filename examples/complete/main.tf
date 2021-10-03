@@ -1,5 +1,6 @@
 module "aci_dhcp_relay_policy" {
-  source = "netascode/dhcp-relay-policy/aci"
+  source  = "netascode/dhcp-relay-policy/aci"
+  version = ">= 0.0.1"
 
   tenant      = "ABC"
   name        = "DHCP-RELAY1"
